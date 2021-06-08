@@ -12,31 +12,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: () {}),
+        title: Text(
+          "Give your Review",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: Container(
         padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: ListView(
           children: [
-            SizedBox(height: 10),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.blue[900],
-              ),
-            ),
-            SizedBox(height: 10),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Give your Review",
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             SizedBox(height: 40),
             Align(
               alignment: Alignment.topLeft,
@@ -164,47 +153,32 @@ showAlertDialog(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     content: Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      width: MediaQuery.of(context).size.width * 0.7,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Image(image: AssetImage('assets/images/feedback.png')),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Submitted!",
-              style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+          // SizedBox(height: 20),
+          Text(
+            "Submitted!",
+            style: TextStyle(
+              fontSize: 25,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Thank you for sharing your thoughts",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+          // SizedBox(height: 20),
+          Text(
+            "Thank you for sharing your thoughts",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              " We appriciate your feedback!",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Image(image: AssetImage('assets/images/tick.jpg')),
+          // Image(
+          //   image: AssetImage('assets/images/tick.jpg'),
+          // ),
         ],
       ),
     ),
