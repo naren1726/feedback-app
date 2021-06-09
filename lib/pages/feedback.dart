@@ -1,9 +1,17 @@
 import 'package:feedback/pages/widgets.dart';
+import 'package:feedback/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 // ignore: must_be_immutable
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isRatingGiven = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(20),
         child: ListView(
           children: [
             Card(
@@ -61,17 +69,17 @@ class MyApp extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 30),
             Text(
               "Rate your Experience",
               style: headingStyle(),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             Text(
               "Please rate your recent visit to the store",
               style: subHeadingStyle(),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 25),
             RatingBar.builder(
               initialRating: 0,
               itemCount: 5,
@@ -110,32 +118,24 @@ class MyApp extends StatelessWidget {
                 }
               },
               onRatingUpdate: (rating) {
+                if (!isRatingGiven)
+                  setState(() {
+                    isRatingGiven = true;
+                  });
                 print(rating);
               },
             ),
-            RatingComments()
+            AnimatedCrossFade(
+              crossFadeState: (isRatingGiven)
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              duration: Duration(milliseconds: 500),
+              firstChild: Container(),
+              secondChild: RatingComments(),
+            )
           ],
         ),
       ),
     );
   }
 }
-
-TextStyle headingStyle() {
-  return TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.w500,
-    fontSize: 20,
-  );
-}
-
-TextStyle subHeadingStyle() {
-  return TextStyle(
-    color: Colors.black45,
-    fontWeight: FontWeight.w600,
-    fontSize: 12,
-  );
-}
-
-  // show the dialog
-

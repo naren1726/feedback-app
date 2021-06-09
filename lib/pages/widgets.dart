@@ -1,13 +1,26 @@
+import 'package:feedback/widgets.dart';
 import 'package:flutter/material.dart';
 
 class RatingComments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        SizedBox(height: 20),
+        Text(
+          "Tell us more",
+          style: headingStyle(),
+        ),
+        SizedBox(height: 10),
+        Text(
+          "Your feedback will help us improve",
+          style: subHeadingStyle(),
+        ),
+        SizedBox(height: 30),
         Container(
-            height: 250,
-            width: 300,
+            margin: EdgeInsets.all(10),
+            height: 300,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white,
