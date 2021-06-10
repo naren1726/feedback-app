@@ -1,69 +1,123 @@
 import 'package:feedback/constants/colors.dart';
+import 'package:feedback/model/formController.dart';
+import 'package:feedback/model/model.dart';
 import 'package:feedback/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'feedbacklistitems.dart';
+class RatingComments extends StatefulWidget {
+  RatingComments({this.rating});
+  final String rating;
 
-class RatingComments extends StatelessWidget {
+  @override
+  _RatingCommentsState createState() => _RatingCommentsState();
+}
+
+class _RatingCommentsState extends State<RatingComments> {
+  final _formKey = GlobalKey<FormState>();
+
+  // TextField Controllers
+  TextEditingController feedbackController = TextEditingController();
+
+  // Method to Submit Feedback and save it in Google Sheets
+  void _submitForm(String rating, String feedback) {
+    // Validate returns true if the form is valid, or false
+    // otherwise.
+    if (_formKey.currentState.validate()) {
+      // If the form is valid, proceed.
+      FeedbackForm feedbackForm = FeedbackForm(rating, feedback);
+
+      FormController formController = FormController();
+
+      _showSnackbar("Submitting Feedback..");
+
+      // Submit 'feedbackForm' and save it in Google Sheets.
+      formController.submitForm(feedbackForm, (String response) {
+        print("Response: $response");
+        if (response == FormController.STATUS_SUCCESS) {
+          // Feedback is saved succesfully in Google Sheets.
+          // _showSnackbar("Feedback Submitted");
+          showAlertDialog(context);
+        } else {
+          // Error Occurred while saving data in Google Sheets.
+          _showSnackbar("Error Occurred!");
+        }
+      });
+    }
+  }
+
+  // Method to show snackbar with 'message'.
+  _showSnackbar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(height: 20),
-        Text(
-          "Tell us more",
-          style: headingStyle(),
-        ),
-        SizedBox(height: 10),
-        Text(
-          "Your feedback will help us improve ",
-          style: subHeadingStyle(),
-        ),
-        SizedBox(height: 30),
-        Container(
-            margin: EdgeInsets.all(10),
-            height: 300,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-              border: Border.all(color: Color(0xFFABA8A8), width: 2),
-            ),
-            child: TextFormField(
-              cursorColor: Colors.black,
-              keyboardType: TextInputType.text,
-              decoration: new InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                contentPadding:
-                    EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-              ),
-            )),
-        SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 70),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              primary: kBlue,
-            ),
-            child: Text(
-              'PUBLISH YOUR FEEDBACK',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontFamily: 'WorkSansMedium'),
-            ),
-            onPressed: () {
-              showAlertDialog(context);
-            },
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(height: 20),
+          Text(
+            "Tell us more",
+            style: headingStyle(),
           ),
-        ),
-      ],
+          SizedBox(height: 10),
+          Text(
+            "Your feedback will help us improve ",
+            style: subHeadingStyle(),
+          ),
+          SizedBox(height: 30),
+          Container(
+              margin: EdgeInsets.all(10),
+              height: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+                border: Border.all(color: Color(0xFFABA8A8), width: 2),
+              ),
+              child: TextFormField(
+                  controller: feedbackController,
+                  cursorColor: Colors.black,
+                  keyboardType: TextInputType.text,
+                  decoration: new InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.only(
+                        left: 15, bottom: 11, top: 11, right: 15),
+                  ),
+                  validator: (value) {
+                    if (value?.isEmpty ?? true)
+                      return "Please enter a feedback";
+                    return null;
+                  })),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 70),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                primary: kBlue,
+              ),
+              child: Text(
+                'SUBMIT YOUR FEEDBACK',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontFamily: 'WorkSansMedium'),
+              ),
+              onPressed: () {
+                _submitForm(widget.rating, feedbackController.text);
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -93,27 +147,6 @@ class RatingComments extends StatelessWidget {
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            SizedBox(height: 10),
-            // ignore: deprecated_member_use
-            RaisedButton(
-              color: Color(0xFF9B3490),
-              textColor: Colors.black,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FeedbackListScreen(),
-                    ));
-              },
-              child: Text(
-                'View Feedback',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              //   image: AssetImage('assets/images/tick.jpg'),
             ),
           ],
         ),

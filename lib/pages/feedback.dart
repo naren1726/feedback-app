@@ -9,7 +9,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isRatingGiven = false;
+  double rating;
 
   @override
   Widget build(BuildContext context) {
@@ -32,22 +32,23 @@ class _MyAppState extends State<MyApp> {
             StoreCard(),
             SizedBox(height: 10),
             RateCard(
-              onPressed: (rating) {
-                if (!isRatingGiven)
-                  setState(() {
-                    isRatingGiven = true;
-                  });
-                print(rating);
+              onPressed: (rate) {
+                setState(() {
+                  rating = rate;
+                });
+                print(rate);
               },
             ),
             SizedBox(height: 10),
             AnimatedCrossFade(
-              crossFadeState: (isRatingGiven)
+              crossFadeState: (rating != null)
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
               duration: Duration(milliseconds: 500),
               firstChild: Container(),
-              secondChild: RatingComments(),
+              secondChild: RatingComments(
+                rating: rating.toString(),
+              ),
             ),
             SizedBox(height: 10),
           ],
