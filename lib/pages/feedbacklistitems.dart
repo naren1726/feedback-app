@@ -34,7 +34,7 @@ class _FeedbackListPageState extends State<FeedbackListPage> {
         backgroundColor: Color(0xFF091D3B),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: () {}),
         title: Text(
-          "Responses",
+          "Responses ",
         ),
       ),
       body: ListView.builder(

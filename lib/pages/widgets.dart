@@ -18,7 +18,7 @@ class RatingComments extends StatelessWidget {
         ),
         SizedBox(height: 10),
         Text(
-          "Your feedback will help us improve",
+          "Your feedback will help us improve ",
           style: subHeadingStyle(),
         ),
         SizedBox(height: 30),
