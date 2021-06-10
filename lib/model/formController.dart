@@ -8,7 +8,7 @@ class FormController {
   // Google App Script Web URL.
   static const String URL = "script.google.com";
   static const String PATH =
-      "macros/s/AKfycbxuhxGlbNDQDe0JJE4E7OjKAJpAfyKCaoRteCPOM-khsl8kVdvWWWVAYqwHet1Quzk6rw/exec";
+      "macros/s/AKfycbwTGBeWQ1_p0KdN3HLLvAK8Evly2NYF3RSkkgVmtaQHauJEeNMYV84HtpK0Io0CfXjh/exec";
 
   // Success Status Message
   static const STATUS_SUCCESS = "SUCCESS";
@@ -22,15 +22,15 @@ class FormController {
       print(uri.toString());
 
       await http.get(uri).then((response) async {
-        // if (response.statusCode == 302) {
-        //   var url = response.headers['location'];
-        //   uri = Uri.tryParse(url);
-        //   await http.get(uri).then((response) {
-        //     callback(convert.jsonDecode(response.body)['status']);
-        //   });
-        // } else {
-        callback(convert.jsonDecode(response.body)['status']);
-        // }
+        if (response.statusCode == 302) {
+          var url = response.headers['location'];
+          uri = Uri.tryParse(url);
+          await http.get(uri).then((response) {
+            callback(convert.jsonDecode(response.body)['status']);
+          });
+        } else {
+          callback(convert.jsonDecode(response.body)['status']);
+        }
       });
     } catch (e) {
       print(e);
