@@ -3,6 +3,8 @@ import 'package:feedback/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 
+import 'feedbacklistitems.dart';
+
 class RatingComments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -86,15 +88,33 @@ class RatingComments extends StatelessWidget {
             ),
             // SizedBox(height: 20),
             Text(
-              "Thank you for sharing your thoughts",
+              "Thanks for the feedback",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            // Image(
-            //   image: AssetImage('assets/images/tick.jpg'),
-            // ),
+            SizedBox(height: 10),
+            // ignore: deprecated_member_use
+            RaisedButton(
+              color: Color(0xFF9B3490),
+              textColor: Colors.black,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FeedbackListScreen(),
+                    ));
+              },
+              child: Text(
+                'View Feedback',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              //   image: AssetImage('assets/images/tick.jpg'),
+            ),
           ],
         ),
       ),
